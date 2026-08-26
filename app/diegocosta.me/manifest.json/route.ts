@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 import * as envs from '~/lib/envs';
 
-import config from '~/app/diegocosta.com.br/config';
+import config from '~/app/diegocosta.me/config';
 
 export const GET = () => {
   return NextResponse.json(

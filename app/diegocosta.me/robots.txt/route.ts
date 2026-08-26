@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import config from '~/app/diegocoxta.com/config';
+import config from '~/app/diegocosta.me/config';
 
 export const GET = () => {
   const { domain } = config;

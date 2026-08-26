@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 
 import { getPages } from '~/lib/md';
 
-import config from '~/app/diegocoxta.com/config';
+import config from '~/app/diegocosta.me/config';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const { domain } = config;
