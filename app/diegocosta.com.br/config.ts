@@ -2,11 +2,10 @@ import npmPackage from '~/package.json';
 import type { ConfigType } from '~/lib/config';
 
 type LocalConfigType = ConfigType & {
-  bio: string;
   repository: string;
 };
 
-const profile: LocalConfigType = {
+const config: LocalConfigType = {
   title: 'Diego Costa',
   jobTitle: ['Engineering Manager', 'Senior Software Engineer'],
   description: 'config.description',
@@ -14,7 +13,6 @@ const profile: LocalConfigType = {
   locales: ['pt'],
   author: 'Diego Costa',
   avatar: 'https://avatars.githubusercontent.com/u/3134422?v=4',
-  bio: 'site.bio',
   links: [
     { type: 'text', title: 'config.links.blog.title', href: '/blog' },
     { type: 'text', title: 'config.links.cv.title', href: '/cv' },
@@ -26,4 +24,4 @@ const profile: LocalConfigType = {
   repository: npmPackage.repository.url,
 };
 
-export default profile;
+export default config;

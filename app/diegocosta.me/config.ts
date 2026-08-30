@@ -7,8 +7,8 @@ type LocalConfigType = ConfigType & {
   };
 };
 
-const profile: LocalConfigType = {
-  title: 'profile.title',
+const config: LocalConfigType = {
+  title: 'config.title',
   description: 'config.description',
   domain: 'diegocosta.me',
   locales: ['en'],
@@ -48,4 +48,4 @@ const profile: LocalConfigType = {
   ],
 };
 
-export default profile;
+export default config;
