@@ -1,11 +1,9 @@
 import type { MetadataRoute } from 'next';
 
-import { SUPPORTED_LANGUAGES } from '~/lib/lang';
-
 import config from '~/app/diegocoxta.com/config';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const { domain } = config;
+  const { domain, locales } = config;
 
   return [
     {
@@ -14,8 +12,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily',
       priority: 1.0,
     },
-    ...SUPPORTED_LANGUAGES.map((lang) => ({
-      url: `https://${domain}/${lang}`,
+    ...locales.map((locale) => ({
+      url: `https://${domain}/${locale}`,
       priority: 0.8,
     })),
   ];

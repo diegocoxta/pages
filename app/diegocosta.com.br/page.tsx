@@ -1,11 +1,15 @@
 import AboutMe from '~/components/AboutMe';
 
+import { getTranslations } from '~/lib/translations';
+
 import config from '~/app/diegocosta.com.br/config';
 
 export default async function HomePage() {
+  const t = await getTranslations(config, config.locales[0]);
+
   return (
     <div id="centered-page">
-      <AboutMe bio={config.bio} />
+      <AboutMe t={t} />
     </div>
   );
 }

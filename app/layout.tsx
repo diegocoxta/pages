@@ -14,7 +14,7 @@ const sourceSans = Source_Sans_3({
 
 export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="pt" suppressHydrationWarning>
       <body
         className={`${sourceSans.variable}`}
         style={

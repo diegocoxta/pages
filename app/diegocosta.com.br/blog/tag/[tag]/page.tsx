@@ -2,6 +2,7 @@ import { type Metadata } from 'next';
 import Link from 'next/link';
 
 import { getPosts, getTags } from '~/lib/md';
+import { getTranslations } from '~/lib/translations';
 
 import Container from '~/components/Container';
 import Title from '~/components/Title';
@@ -18,6 +19,8 @@ interface TagsSinglePageProps {
 export default async function TagsSinglePage({ params }: TagsSinglePageProps) {
   const { tag } = await params;
 
+  const t = await getTranslations(config, config.locales[0]);
+
   return (
     <Container>
       <PageName>#{tag}</PageName>
@@ -29,7 +32,7 @@ export default async function TagsSinglePage({ params }: TagsSinglePageProps) {
               <Title>
                 <Link href={`/blog/${post.slug}`}>{post.title}</Link>
               </Title>
-              <Attributes {...post} />
+              <Attributes {...post} t={t} />
             </header>
             <Article>{post.expanded ? post.content : post.summary!}</Article>
           </article>

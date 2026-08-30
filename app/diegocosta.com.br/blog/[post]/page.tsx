@@ -2,6 +2,7 @@ import { type Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { getPosts, readFile } from '~/lib/md';
+import { getTranslations } from '~/lib/translations';
 
 import Container from '~/components/Container';
 import Title from '~/components/Title';
@@ -17,6 +18,8 @@ interface BlogPostPageProps {
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { post } = await params;
+
+  const t = await getTranslations(config, config.locales[0]);
   const content = readFile(config.domain, `/posts/${post}`);
 
   return (
@@ -25,7 +28,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <article>
         <header>
           <Title>{content?.title}</Title>
-          <Attributes {...content} />
+          <Attributes {...content} t={t} />
         </header>
         <Article>{content?.content}</Article>
       </article>

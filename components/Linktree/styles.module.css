@@ -170,4 +170,6 @@
 .qrCodeImage {
   width: 100%;
   height: auto;
+  filter: saturate(0);
+  opacity: 0.8;
 }

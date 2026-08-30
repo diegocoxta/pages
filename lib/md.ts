@@ -4,6 +4,8 @@ import matter from 'gray-matter';
 import readingTime from 'reading-time';
 import { cache } from 'react';
 
+import { getSiteLocales } from '~/lib/sites';
+
 export type ContentAttributes = {
   title: string;
   slug: string;
@@ -21,13 +23,31 @@ export type BlogContentAttributes = ContentAttributes & {
   expanded?: string;
 };
 
+function resolveContentFile(site: string, filename: string, locale?: string): string | undefined {
+  const dir = path.join(process.cwd(), 'public', site, filename);
+  const defaultLocale = getSiteLocales(site)[0];
+
+  const candidates = [...(locale ? [`index.${locale}.md`] : []), `index.${defaultLocale}.md`, 'index.md'];
+
+  for (const name of candidates) {
+    const file = path.join(dir, name);
+
+    if (fs.existsSync(file)) {
+      return file;
+    }
+  }
+
+  return undefined;
+}
+
 export const readFile = cache(function readFile<T extends ContentAttributes>(
   site: string,
-  filename: string
+  filename: string,
+  locale?: string
 ): T | undefined {
-  const file = path.join(process.cwd(), 'public', site, filename, 'index.mdx');
+  const file = resolveContentFile(site, filename, locale);
 
-  if (!fs.existsSync(file)) {
+  if (!file) {
     return undefined;
   }
 
@@ -53,10 +73,14 @@ function getFileList<T extends ContentAttributes>(site: string, dir: string): Ar
     return [];
   }
 
-  return fs.readdirSync(fileDir).map((slug) => ({
-    ...readFile<T>(site, `${dir}/${slug}`)!,
-    slug,
-  }));
+  return fs
+    .readdirSync(fileDir)
+    .map((slug) => {
+      const file = readFile<T>(site, `${dir}/${slug}`);
+
+      return file ? { ...file, slug } : undefined;
+    })
+    .filter((entry): entry is T => entry !== undefined);
 }
 
 function updateContentImagePaths(bodyContent: string, site: string, dirname: string) {

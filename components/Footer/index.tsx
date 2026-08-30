@@ -1,20 +1,21 @@
 import Link from 'next/link';
 
 import type { ConfigType } from '~/lib/config';
+import type { ComponentWithTranslator } from '~/lib/i18n';
 
 import styles from './styles.module.css';
 
-interface FooterProps {
+type FooterProps = ComponentWithTranslator<{
   author: string;
   links?: ConfigType['links'];
-}
+}>;
 
-export default function Footer(props: FooterProps): React.ReactElement {
+export default function Footer({ t, ...props }: FooterProps): React.ReactElement {
   const year = new Date().getFullYear();
 
   return (
     <footer className={styles.container}>
-      <nav aria-label="Links profissionais e contato">
+      <nav aria-label={t('components.footer.ariaLabel')}>
         {props.links && (
           <ul className={styles.links} data-testid="about-me-links">
             {props.links.map((link, index) => (
@@ -25,7 +26,7 @@ export default function Footer(props: FooterProps): React.ReactElement {
                   rel="me noopener"
                   target={link.href.startsWith('http') ? '_blank' : undefined}
                 >
-                  {`${link.title}`}
+                  {t(link.title)}
                 </Link>
               </li>
             ))}

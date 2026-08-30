@@ -2,13 +2,16 @@ import { NextResponse } from 'next/server';
 import Rss from 'rss';
 
 import { getPosts } from '~/lib/md';
+import { getTranslations } from '~/lib/translations';
 
 import config from '~/app/diegocosta.com.br/config';
 
 export async function GET() {
+  const t = await getTranslations(config, config.locales[0]);
+
   const feed = new Rss({
-    title: `${config.title}`,
-    description: `${config.description}`,
+    title: config.title,
+    description: t(config.description),
     feed_url: `https://${config.domain}/blog/feed`,
     site_url: `https://${config.domain}`,
     pubDate: new Date(),

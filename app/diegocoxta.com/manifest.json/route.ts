@@ -1,15 +1,18 @@
 import { NextResponse } from 'next/server';
 
 import * as envs from '~/lib/envs';
+import { getTranslations } from '~/lib/translations';
 
 import config from '~/app/diegocoxta.com/config';
 
-export const GET = () => {
+export const GET = async () => {
+  const t = await getTranslations(config, config.locales[0]);
+
   return NextResponse.json(
     {
       name: `${config.author} (${config.title})`,
       short_name: `${config.author} (${config.title})`,
-      description: config.description,
+      description: t(config.description),
       start_url: '/',
       display: 'standalone',
       theme_color: envs.SITE_ACCENT_COLOR,

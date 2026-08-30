@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { getPosts } from '~/lib/md';
+import { getTranslations } from '~/lib/translations';
 
 import Container from '~/components/Container';
 import Title from '~/components/Title';
@@ -10,7 +11,9 @@ import Article from '~/components/Article';
 
 import config from '~/app/diegocosta.com.br/config';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const t = await getTranslations(config, config.locales[0]);
+
   return (
     <Container>
       <PageName>blog</PageName>
@@ -20,7 +23,7 @@ export default function HomePage() {
             <Title>
               <Link href={`/blog/${post.slug}`}>{post.title}</Link>
             </Title>
-            <Attributes {...post} />
+            <Attributes {...post} t={t} />
           </header>
           <Article>{post.expanded ? post.content : post.summary!}</Article>
         </article>

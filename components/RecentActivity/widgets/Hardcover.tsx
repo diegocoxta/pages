@@ -1,14 +1,12 @@
 import { FaBook } from 'react-icons/fa6';
 
 import { getUserCurrentReads } from '~/lib/services/hardcover';
-import type { RecentActivityType } from '~/lib/config';
-import { getLocatedString } from '~/lib/lang';
+
+import type { RecentActivityProps } from '../index';
 
 import styles from '../styles.module.css';
 
-export default async function HardcoverWidget(props: Pick<RecentActivityType, 'config' | 'lang'>) {
-  const { config, lang } = props;
-
+export default async function HardcoverWidget({ config, t }: RecentActivityProps) {
   if (!config.authorization) {
     return <></>;
   }
@@ -23,7 +21,7 @@ export default async function HardcoverWidget(props: Pick<RecentActivityType, 'c
     books &&
     books?.length > 0 && (
       <>
-        {config.title && <h3 className={styles.title}>{getLocatedString(config.title, lang)}</h3>}
+        {config.title && <h3 className={styles.title}>{t(config.title)}</h3>}
         <ul className={styles.grid}>
           {books?.map((book) => (
             <li className={styles.item} key={book.id}>
@@ -43,7 +41,10 @@ export default async function HardcoverWidget(props: Pick<RecentActivityType, 'c
               )}
               <h4 className={styles.itemTitle}>{book.book.title}</h4>
               <p className={styles.itemDate}>
-                Page {book.user_book_reads[0].progress_pages || '0'} / {book.book.pages}
+                {t('components.recentActivity.hardcover.pageProgress', {
+                  current: book.user_book_reads[0].progress_pages || '0',
+                  total: book.book.pages ?? '',
+                })}
               </p>
             </li>
           ))}

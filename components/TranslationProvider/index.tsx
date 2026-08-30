@@ -1,0 +1,28 @@
+'use client';
+
+import { createContext, useContext, useMemo } from 'react';
+
+import { createTranslator, type Locale, type Translator } from '~/lib/i18n';
+
+const TranslatorContext = createContext<Translator | null>(null);
+
+interface TranslationProviderProps {
+  messages: Record<string, string>;
+  locale: Locale;
+  children: React.ReactNode;
+}
+
+export function TranslationProvider({ messages, locale, children }: TranslationProviderProps) {
+  const t = useMemo(() => createTranslator(messages, locale), [messages, locale]);
+  return <TranslatorContext.Provider value={t}>{children}</TranslatorContext.Provider>;
+}
+
+export function useTranslator(): Translator {
+  const t = useContext(TranslatorContext);
+
+  if (!t) {
+    throw new Error('useTranslator() precisa estar dentro de <TranslationProvider>.');
+  }
+
+  return t;
+}

@@ -4,17 +4,26 @@ import * as Fa from 'react-icons/fa6';
 
 import Container from '~/components/Container';
 
+import { getTranslations } from '~/lib/translations';
+
 import config from '~/app/diegocosta.me/config';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const t = await getTranslations(config, config.locales[0]);
+
   return (
     <Container>
       <section className="sectionPreview">
         <div className="text">
-          <p>This page is currently under construction.</p>
+          <p>{t('page.home.underConstruction')}</p>
           <p>
-            In the meantime, you can check out some of my photos on
-            <a target="_blank" href="https://unsplash.com/diegocoxta" className="link">
+            {t('page.home.checkPhotos')}
+            <a
+              target="_blank"
+              href="https://unsplash.com/diegocoxta"
+              className="link"
+              title={t('config.links.unsplash.title')}
+            >
               <Fa.FaUnsplash /> Unsplash
             </a>
           </p>
@@ -28,7 +37,7 @@ export default function HomePage() {
               const Icon = Fa[link.icon as keyof typeof Fa];
               return (
                 <li key={link.href}>
-                  <a target="_blank" href={link.href} rel="me noreferrer noopener">
+                  <a target="_blank" href={link.href} rel="me noopener" title={t(link.title)}>
                     <Icon />
                   </a>
                 </li>

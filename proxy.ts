@@ -1,29 +1,50 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getPreferredLanguage } from './lib/lang';
+
+import { LOCALE_COOKIE, negotiateLocale } from '~/lib/i18n';
+import { getSiteLocales, hasLocaleRouting, resolveHostname, rewriteToSite } from '~/lib/sites';
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };
 
+const NON_LOCALIZED =
+  /^\/(icon|apple-icon|opengraph-image|twitter-image|robots\.txt|manifest\.json|sitemap\.xml)(\/|$)|\.[^/]+$/;
+
 export function proxy(request: NextRequest) {
-  const url = request.nextUrl.clone();
-  let hostname = request.headers.get('host') || '';
+  const { pathname } = request.nextUrl;
+  const hostname = resolveHostname(request);
+  const locales = getSiteLocales(hostname);
 
-  hostname = hostname.split(':')[0];
-
-  if (hostname === 'localhost') {
-    hostname = process.env.DEV_SITE || 'diegocosta.com.br';
+  // Site de idioma único (ou asset/metadata): sem prefixo, serve direto no host.
+  if (!hasLocaleRouting(locales) || NON_LOCALIZED.test(pathname)) {
+    return NextResponse.rewrite(rewriteToSite(request, hostname, pathname));
   }
 
-  if (hostname === 'diegocoxta.com' && url.pathname === '/') {
-    const lang = getPreferredLanguage(request);
-    url.pathname = `/${lang}`;
+  const firstSegment = pathname.split('/')[1];
+
+  // Sem prefixo de idioma suportado -> redireciona para o idioma negociado.
+  if (!locales.includes(firstSegment)) {
+    const locale = negotiateLocale(
+      locales,
+      request.cookies.get(LOCALE_COOKIE)?.value,
+      request.headers.get('accept-language')
+    );
+    const url = request.nextUrl.clone();
+
+    url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
 
     return NextResponse.redirect(url);
   }
 
-  url.pathname = `/${hostname}${url.pathname}`;
+  // "/pt/..." -> interno "/<host>/pt/...", e persiste a escolha no cookie.
+  const response = NextResponse.rewrite(rewriteToSite(request, hostname, pathname));
 
-  return NextResponse.rewrite(url);
+  response.cookies.set(LOCALE_COOKIE, firstSegment, {
+    path: '/',
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: 'lax',
+  });
+
+  return response;
 }
