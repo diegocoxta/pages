@@ -28,7 +28,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "app/diegocoxta.com/[locale]/teste",
     "lib/translations"
   ],
   "exclude": ["node_modules"]
