@@ -7,7 +7,7 @@ const config: ConfigType = {
   jobTitle: ['Engineering Manager', 'Senior Software Engineer', 'Photographer'],
   domain: 'diegocoxta.com',
   author: 'Diego Costa',
-  avatar: '/background_v2.jpg',
+  avatar: '/background_v4.jpg',
   links: [
     {
       type: 'icon',
