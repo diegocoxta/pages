@@ -20,12 +20,8 @@ export type ComponentWithTranslator<P = unknown> = P & { t: Translator };
  */
 const MESSAGE_KEY = /^(config|components|page)\./;
 
-export function isMessageKey(value: string): boolean {
-  return MESSAGE_KEY.test(value);
-}
-
 /** Prefixos de chaves consumidas por Client Components — só elas vão para o browser. */
-export const CLIENT_MESSAGE_PREFIXES = ['components.commandBar.', 'components.themeSwitcher.'] as const;
+const CLIENT_MESSAGE_PREFIXES = ['components.commandBar.', 'components.themeSwitcher.'] as const;
 
 export function pickClientMessages(messages: Record<string, string>): Record<string, string> {
   return Object.fromEntries(
@@ -65,7 +61,7 @@ export function createTranslator(messages: Record<string, string>, locale: Local
     const value = lookup(key, params);
 
     if (value === undefined) {
-      if (process.env.NODE_ENV !== 'production' && isMessageKey(key)) {
+      if (process.env.NODE_ENV !== 'production' && MESSAGE_KEY.test(key)) {
         console.warn(`[i18n] chave ausente: "${key}" (${locale})`);
       }
 

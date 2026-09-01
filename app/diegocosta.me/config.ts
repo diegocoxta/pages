@@ -1,5 +1,7 @@
 import type { ConfigType } from '~/lib/config';
 
+import globalConfig from '~/app/config';
+
 type LocalConfigType = ConfigType & {
   unsplash: {
     username?: string;
@@ -8,6 +10,7 @@ type LocalConfigType = ConfigType & {
 };
 
 const config: LocalConfigType = {
+  ...globalConfig,
   title: 'config.title',
   description: 'config.description',
   domain: 'diegocosta.me',

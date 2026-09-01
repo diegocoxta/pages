@@ -9,6 +9,7 @@ export type ConfigType = {
   links?: Array<IconLinkType | CardLinkType | TextLinkType>;
   jobTitle?: Array<string>;
   locales: readonly Locale[];
+  theme: SiteThemeType;
 };
 
 export type ConfigLinkType = {
@@ -42,3 +43,8 @@ export type RecentActivityType = {
 };
 
 export type SiteType = Pick<ConfigType, 'domain' | 'locales'>;
+
+export type SiteThemeType = {
+  accentColor: string;
+  textColor: string;
+};

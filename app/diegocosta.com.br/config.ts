@@ -1,11 +1,14 @@
 import npmPackage from '~/package.json';
 import type { ConfigType } from '~/lib/config';
 
+import globalConfig from '~/app/config';
+
 type LocalConfigType = ConfigType & {
   repository: string;
 };
 
 const config: LocalConfigType = {
+  ...globalConfig,
   title: 'Diego Costa',
   jobTitle: ['Engineering Manager', 'Senior Software Engineer'],
   description: 'config.description',

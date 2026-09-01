@@ -1,6 +1,9 @@
 import type { ConfigType } from '~/lib/config';
 
+import globalConfig from '~/app/config';
+
 const config: ConfigType = {
+  ...globalConfig,
   title: '@diegocoxta',
   description: 'config.description',
   locales: ['pt', 'en', 'es'],
