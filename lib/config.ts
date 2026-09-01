@@ -15,7 +15,6 @@ export type ConfigLinkType = {
   title: string;
   href: string;
   description?: string;
-  order?: number;
 };
 
 export type TextLinkType = ConfigLinkType & {

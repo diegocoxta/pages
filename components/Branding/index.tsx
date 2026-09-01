@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import styles from './styles.module.css';
 
-export interface BrandingProps {
+interface BrandingProps {
   name: string;
   href?: string;
   size?: number;

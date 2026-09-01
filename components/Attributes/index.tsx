@@ -5,7 +5,7 @@ import type { ComponentWithTranslator } from '~/lib/i18n';
 
 import styles from './styles.module.css';
 
-export type MetaAttributesProps = ComponentWithTranslator<
+type MetaAttributesProps = ComponentWithTranslator<
   Partial<Pick<BlogContentAttributes, 'date' | 'readingTime' | 'language' | 'tags'>>
 >;
 

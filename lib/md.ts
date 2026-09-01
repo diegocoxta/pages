@@ -13,7 +13,6 @@ export type ContentAttributes = {
   readingTime: number;
   summary?: string;
   status?: string;
-  shortcuts?: string;
 };
 
 export type BlogContentAttributes = ContentAttributes & {

@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 import type { ConfigType } from '~/lib/config';
-import { LOCALE_HEADER, LOCALES, type Locale } from '~/lib/i18n';
+import { LOCALES, type Locale } from '~/lib/i18n';
 
 import diegocoxtaCom from '~/app/diegocoxta.com/config';
 import diegocostaComBr from '~/app/diegocosta.com.br/config';
@@ -29,17 +29,10 @@ export function resolveHostname(request: NextRequest): string {
   return hostname;
 }
 
-export function rewriteToSite(request: NextRequest, hostname: string, pathname: string): URL {
+export function rewriteWithLocale(request: NextRequest, hostname: string, pathname: string, locale: string) {
   const url = request.nextUrl.clone();
 
   url.pathname = `/${hostname}${pathname}`;
 
-  return url;
-}
-
-export function rewriteWithLocale(request: NextRequest, hostname: string, pathname: string, locale: string) {
-  const headers = new Headers(request.headers);
-  headers.set(LOCALE_HEADER, locale);
-
-  return NextResponse.rewrite(rewriteToSite(request, hostname, pathname), { request: { headers } });
+  return NextResponse.rewrite(url);
 }
