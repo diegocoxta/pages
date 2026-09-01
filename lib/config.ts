@@ -40,3 +40,5 @@ export type RecentActivityType = {
   widget: string;
   config: Record<string, string | undefined>;
 };
+
+export type SiteType = Pick<ConfigType, 'domain' | 'locales'>;

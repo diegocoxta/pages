@@ -5,7 +5,6 @@ import styles from './styles.module.css';
 interface UsernameProps {
   username: string;
   size?: number;
-  href?: string;
 }
 
 export default function Username(props: UsernameProps) {

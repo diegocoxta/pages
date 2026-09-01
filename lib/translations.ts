@@ -5,10 +5,10 @@ import path from 'node:path';
 
 import { cache } from 'react';
 
-import type { Site } from '~/lib/sites';
 import { createTranslator, isSupportedLocale, pickClientMessages, type Locale, type Translator } from '~/lib/i18n';
+import type { SiteType } from '~/lib/config';
 
-function resolveLocale(site: Site, locale?: string | null): Locale {
+function resolveLocale(site: SiteType, locale?: string | null): Locale {
   return isSupportedLocale(site.locales, locale) ? locale : site.locales[0];
 }
 
@@ -26,8 +26,7 @@ const readDictionary = cache((domain: string, locale: Locale): Record<string, st
   }
 });
 
-/** Mensagens do locale pedido, com o locale padrão do site como fallback por chave. */
-const loadMessages = cache((site: Site, locale: Locale): Record<string, string> => {
+const loadMessages = cache((site: SiteType, locale: Locale): Record<string, string> => {
   const fallback = site.locales[0];
 
   if (locale === fallback) {
@@ -37,12 +36,11 @@ const loadMessages = cache((site: Site, locale: Locale): Record<string, string> 
   return { ...readDictionary(site.domain, fallback), ...readDictionary(site.domain, locale) };
 });
 
-export const getTranslations = cache(async (site: Site, locale?: string): Promise<Translator> => {
+export const getTranslations = cache(async (site: SiteType, locale?: string): Promise<Translator> => {
   const resolved = resolveLocale(site, locale);
   return createTranslator(loadMessages(site, resolved), resolved);
 });
 
-/** Só o subconjunto de mensagens consumido por Client Components, para o `TranslationProvider`. */
-export const getClientMessages = cache(async (site: Site, locale?: string): Promise<Record<string, string>> => {
+export const getClientMessages = cache(async (site: SiteType, locale?: string): Promise<Record<string, string>> => {
   return pickClientMessages(loadMessages(site, resolveLocale(site, locale)));
 });

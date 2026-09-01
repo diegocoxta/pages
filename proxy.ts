@@ -1,26 +1,36 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-import { LOCALE_COOKIE, LOCALE_COOKIE_MAX_AGE, isSupportedLocale, negotiateLocale } from '~/lib/i18n';
-import { getSiteLocales, hasLocaleRouting, resolveHostname, rewriteWithLocale } from '~/lib/sites';
+import type { SiteType } from '~/lib/config';
+import { LOCALES, LOCALE_COOKIE, LOCALE_COOKIE_MAX_AGE, isSupportedLocale, negotiateLocale } from '~/lib/i18n';
 
-export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
-};
+import diegocoxtaCom from '~/app/diegocoxta.com/config';
+import diegocostaComBr from '~/app/diegocosta.com.br/config';
+import diegocostaMe from '~/app/diegocosta.me/config';
 
-const NON_LOCALIZED =
-  /^\/(icon|apple-icon|opengraph-image|twitter-image|robots\.txt|manifest\.json|sitemap\.xml)(\/|$)|\.[^/]+$/;
+const SITES: readonly SiteType[] = [diegocoxtaCom, diegocostaComBr, diegocostaMe];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const url = request.nextUrl.clone();
 
-  const hostname = resolveHostname(request);
-  const locales = getSiteLocales(hostname);
+  let hostname = (request.headers.get('host') || '').split(':')[0];
 
-  const onlyOneLanguageOrAssetMetadata = !hasLocaleRouting(locales) || NON_LOCALIZED.test(pathname);
+  if (hostname === 'localhost') {
+    hostname = process.env.DEV_SITE || 'diegocosta.com.br';
+  }
+
+  const locales = SITES.find((site) => site.domain === hostname)?.locales ?? [LOCALES[0]];
+
+  const assetMetadata =
+    /^\/(icon|apple-icon|opengraph-image|twitter-image|robots\.txt|manifest\.json|sitemap\.xml)(\/|$)|\.[^/]+$/;
+
+  const onlyOneLanguageOrAssetMetadata = locales.length < 2 || assetMetadata.test(pathname);
 
   if (onlyOneLanguageOrAssetMetadata) {
-    return rewriteWithLocale(request, hostname, pathname, locales[0]);
+    url.pathname = `/${hostname}${pathname}`;
+
+    return NextResponse.rewrite(url);
   }
 
   const firstSegment = pathname.split('/')[1];
@@ -30,14 +40,15 @@ export function proxy(request: NextRequest) {
 
   if (withoutLanguagePrefix) {
     const locale = negotiateLocale(locales, cookie, request.headers.get('accept-language'));
-    const url = request.nextUrl.clone();
 
     url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
 
     return NextResponse.redirect(url);
   }
 
-  const response = rewriteWithLocale(request, hostname, pathname, firstSegment);
+  url.pathname = `/${hostname}${pathname}`;
+
+  const response = NextResponse.rewrite(url);
 
   if (cookie !== firstSegment) {
     response.cookies.set(LOCALE_COOKIE, firstSegment, {
@@ -50,3 +61,7 @@ export function proxy(request: NextRequest) {
 
   return response;
 }
+
+export const config = {
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+};

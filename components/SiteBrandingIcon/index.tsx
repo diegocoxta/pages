@@ -2,21 +2,21 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { ImageResponse } from 'next/og';
 
-import { SITE_ACCENT_COLOR, SITE_TEXT_COLOR } from '~/lib/envs';
-
 const fontPath = readFileSync(join(process.cwd(), 'public/fonts/SourceSans3-Bold.ttf'));
 
 interface IconType {
   width: number;
   height: number;
   fontSize: number;
+  accentColor: string;
+  textColor: string;
 }
 
 export default async function SiteBrandingIcon(config: IconType) {
   const styles: { [key: string]: React.CSSProperties } = {
     container: {
       background: 'transparent',
-      color: SITE_TEXT_COLOR,
+      color: config.textColor,
       display: 'flex',
       width: '100%',
       height: '100%',
@@ -35,7 +35,7 @@ export default async function SiteBrandingIcon(config: IconType) {
       justifyContent: 'center',
     },
     lastName: {
-      color: SITE_ACCENT_COLOR,
+      color: config.accentColor,
     },
   };
 

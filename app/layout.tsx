@@ -2,8 +2,6 @@ import type { Viewport, Metadata } from 'next';
 import { Source_Sans_3 } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 
-import { SITE_ACCENT_COLOR } from '~/lib/envs';
-
 import './globals.css';
 
 const sourceSans = Source_Sans_3({
@@ -19,7 +17,7 @@ export default async function RootLayout({ children }: React.PropsWithChildren) 
         className={`${sourceSans.variable}`}
         style={
           {
-            '--main-accent-color': SITE_ACCENT_COLOR,
+            '--main-accent-color': `#${process.env.SITE_ACCENT_COLOR ?? 'e55242'}`,
           } as React.CSSProperties
         }
       >

@@ -22,14 +22,6 @@ export type BlogContentAttributes = ContentAttributes & {
   expanded?: string;
 };
 
-/**
- * Resolve o arquivo de conteúdo de um post/página, na ordem:
- *
- *   index.<locale>.md  ->  index.<defaultLocale>.md  ->  index.md
- *
- * Convenção: `index.md` é o conteúdo no idioma padrão; `index.<locale>.md`
- * sobrescreve para um locale específico. Sem `locale`, cai direto no `index.md`.
- */
 function resolveContentFile(
   site: string,
   filename: string,
@@ -70,7 +62,6 @@ const readFile = cache(function readFile<T extends ContentAttributes>(
   const { data, content } = matter(fs.readFileSync(file, 'utf-8'));
 
   if (data.date) {
-    // ISO `YYYY-MM-DD`: parse estável em UTC na exibição, e válido para `<time dateTime>`.
     data.date = new Date(data.date).toISOString().slice(0, 10);
   }
 
@@ -125,15 +116,6 @@ const getTags = cache(function getTags(site: string, locale?: string, defaultLoc
   return [...new Set(tags)];
 });
 
-/**
- * Liga as funções de conteúdo a um site: injeta o `domain` e usa `locales[0]`
- * como fallback, então o caller só informa o locale desejado (ou nada, num
- * site de idioma único).
- *
- *   const content = contentFor(config);
- *   content.getPosts(locale);
- *   content.readFile(`/posts/${slug}`, locale);
- */
 export function contentFor({ domain, locales }: Pick<ConfigType, 'domain' | 'locales'>) {
   const [defaultLocale] = locales;
 
