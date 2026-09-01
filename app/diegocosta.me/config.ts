@@ -22,8 +22,6 @@ const config: LocalConfigType = {
     authorization: process.env.UNSPLASH_ACCESS_KEY,
   },
   links: [
-    { type: 'text', href: 'https://diegocoxta.com', title: 'diegocosta.com' },
-    { type: 'text', href: 'https://diegocosta.com.br', title: 'diegocosta.com.br' },
     {
       type: 'icon',
       icon: 'FaUnsplash',
