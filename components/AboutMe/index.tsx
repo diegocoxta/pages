@@ -8,7 +8,7 @@ export default function AboutMe({ t }: ComponentWithTranslator) {
       {t('components.aboutme.bio')
         .split('\n')
         .map((p: string) => (
-          <p className={styles.paragraph} data-testid="about-me-bio" key={p} dangerouslySetInnerHTML={{ __html: p }} />
+          <p className={styles.paragraph} key={p} dangerouslySetInnerHTML={{ __html: p }} />
         ))}
     </main>
   );

@@ -24,9 +24,9 @@ export default function MetaAttributes({ t, ...props }: MetaAttributesProps): Re
         <span aria-hidden="true">{' · '}</span>
         <span>{t('components.attributes.inLanguage', { language: props.language ?? '' })}</span>
       </div>
-      <ul className={styles.tagList} data-testid="taglist-list" aria-label={t('components.attributes.tagsLabel')}>
+      <ul className={styles.tagList} aria-label={t('components.attributes.tagsLabel')}>
         {props.tags?.map((tag: string, index: number) => (
-          <li className={styles.tagItem} key={`${index}-${tag}`} data-testid="taglist-item">
+          <li className={styles.tagItem} key={`${index}-${tag}`}>
             <Link className={styles.tagLink} href={`/blog/tag/${tag}`}>{`#${tag}`}</Link>
           </li>
         ))}

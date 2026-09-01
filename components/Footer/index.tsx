@@ -17,9 +17,9 @@ export default function Footer({ t, ...props }: FooterProps): React.ReactElement
     <footer className={styles.container}>
       <nav aria-label={t('components.footer.ariaLabel')}>
         {props.links && (
-          <ul className={styles.links} data-testid="about-me-links">
+          <ul className={styles.links}>
             {props.links.map((link, index) => (
-              <li className={styles.linksItem} key={`nav-${index}`} data-testid="about-me-links-item">
+              <li className={styles.linksItem} key={`nav-${index}`}>
                 <Link
                   className={styles.linksLink}
                   href={link.href}

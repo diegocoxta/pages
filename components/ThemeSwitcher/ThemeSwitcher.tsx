@@ -21,15 +21,10 @@ export default function ThemeSwitcher({ isDarkMode, onClick }: ThemeSwitcherProp
       aria-checked={isDarkMode}
       aria-label={t('components.themeSwitcher.ariaLabel')}
       onClick={onClick}
-      data-testid="themeswitcher--button"
       role="switch"
     >
       <span className={styles.indicator} aria-hidden>
-        {isDarkMode ? (
-          <FiMoon data-testid="react-icon-bsmoon" size={16} />
-        ) : (
-          <FiSun data-testid="react-icon-bssun" size={16} />
-        )}
+        {isDarkMode ? <FiMoon size={16} /> : <FiSun size={16} />}
       </span>
     </button>
   );
