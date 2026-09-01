@@ -15,7 +15,7 @@ export default async function DiscogsWidget({ config, t }: RecentActivityProps) 
   });
 
   return (
-    data.releases.length > 0 && (
+    data.releases?.length > 0 && (
       <>
         {config.title && <h3 className={styles.title}>{t(config.title)}</h3>}
         <ul className={styles.grid}>
@@ -29,7 +29,7 @@ export default async function DiscogsWidget({ config, t }: RecentActivityProps) 
                 aria-hidden
               ></div>
               <p className={styles.itemTitle}>
-                {release.basic_information.title} - {release.basic_information.artists[0].name}
+                {release.basic_information.title} - {release.basic_information.artists?.[0]?.name}
               </p>
               <time dateTime={release.date_added} className={styles.itemDate}>
                 {t.date(release.date_added, { month: 'long', year: 'numeric' })}

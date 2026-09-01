@@ -15,7 +15,7 @@ export default async function HardcoverWidget({ config, t }: RecentActivityProps
     authorization: config.authorization.toString(),
   });
 
-  const books = data.data?.me[0].user_books;
+  const books = data.data?.me?.[0]?.user_books;
 
   return (
     books &&
@@ -42,7 +42,7 @@ export default async function HardcoverWidget({ config, t }: RecentActivityProps
               <h4 className={styles.itemTitle}>{book.book.title}</h4>
               <p className={styles.itemDate}>
                 {t('components.recentActivity.hardcover.pageProgress', {
-                  current: book.user_book_reads[0].progress_pages || '0',
+                  current: book.user_book_reads?.[0]?.progress_pages || '0',
                   total: book.book.pages,
                 })}
               </p>

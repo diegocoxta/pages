@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import { isSupportedLocale } from '~/lib/i18n';
-import { getClientMessages, getTranslations } from '~/lib/translations';
+import { getClientMessages, getTranslations } from '~/lib/i18n/messages';
 
 import TranslationProvider from '~/components/TranslationProvider';
 
@@ -23,10 +23,9 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     notFound();
   }
 
-  const t = await getTranslations(config, locale);
-  const messages = await getClientMessages(config, locale);
+  const t = getTranslations(config, locale);
+  const messages = getClientMessages(config, locale);
 
-  // Sem mensagens de client component neste site: evita montar um provider vazio.
   if (Object.keys(messages).length === 0) {
     return children;
   }

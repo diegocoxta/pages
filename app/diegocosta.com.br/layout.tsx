@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
-import { contentFor } from '~/lib/md';
-import { getClientMessages, getTranslations } from '~/lib/translations';
+import { contentFor } from '~/lib/content';
+import { getClientMessages, getTranslations } from '~/lib/i18n/messages';
 
 import TranslationProvider from '~/components/TranslationProvider';
 import PersonSchema from '~/components/PersonSchema';
@@ -15,9 +15,9 @@ import config from '~/app/diegocosta.com.br/config';
 
 const content = contentFor(config);
 
-export default async function RootLayout({ children }: React.PropsWithChildren) {
-  const t = await getTranslations(config);
-  const messages = await getClientMessages(config);
+export default function RootLayout({ children }: React.PropsWithChildren) {
+  const t = getTranslations(config);
+  const messages = getClientMessages(config);
 
   const pages = content.getPages();
   const posts = content.getPosts();
@@ -40,8 +40,8 @@ export default async function RootLayout({ children }: React.PropsWithChildren) 
   );
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations(config);
+export function generateMetadata(): Metadata {
+  const t = getTranslations(config);
 
   return {
     metadataBase: new URL(`https://${config.domain}`),

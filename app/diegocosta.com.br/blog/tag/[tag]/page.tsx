@@ -1,8 +1,8 @@
 import { type Metadata } from 'next';
 import Link from 'next/link';
 
-import { contentFor } from '~/lib/md';
-import { getTranslations } from '~/lib/translations';
+import { contentFor } from '~/lib/content';
+import { getTranslations } from '~/lib/i18n/messages';
 
 import Container from '~/components/Container';
 import Title from '~/components/Title';
@@ -21,7 +21,7 @@ interface TagsSinglePageProps {
 export default async function TagsSinglePage({ params }: TagsSinglePageProps) {
   const { tag } = await params;
 
-  const t = await getTranslations(config);
+  const t = getTranslations(config);
 
   return (
     <Container>

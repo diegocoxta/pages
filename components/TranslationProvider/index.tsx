@@ -2,7 +2,8 @@
 
 import { createContext, useContext, useMemo } from 'react';
 
-import { createTranslator, type Locale, type Translator } from '~/lib/i18n';
+import { createTranslator, type Translator } from '~/lib/i18n/translator';
+import type { Locale } from '~/lib/i18n/locale';
 
 const TranslatorContext = createContext<Translator | null>(null);
 

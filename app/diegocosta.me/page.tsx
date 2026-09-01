@@ -2,14 +2,14 @@ import './page.css';
 
 import * as Fa from 'react-icons/fa6';
 
-import Container from '~/components/Container';
+import { getTranslations } from '~/lib/i18n/messages';
 
-import { getTranslations } from '~/lib/translations';
+import Container from '~/components/Container';
 
 import config from '~/app/diegocosta.me/config';
 
-export default async function HomePage() {
-  const t = await getTranslations(config);
+export default function HomePage() {
+  const t = getTranslations(config);
 
   return (
     <Container>

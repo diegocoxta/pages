@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { getTranslations } from '~/lib/translations';
+import { getTranslations } from '~/lib/i18n/messages';
 
 import Linktree, { type LinktreeProps } from '~/components/Linktree';
 import Username from '~/components/Username';
@@ -16,7 +16,7 @@ interface HomePageProps {
 export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params;
 
-  const t = await getTranslations(config, locale);
+  const t = getTranslations(config, locale);
 
   const icons = config.links?.filter((link) => link.type === 'icon');
   const cards = config.links?.filter((link) => link.type === 'card');
@@ -37,7 +37,7 @@ export default async function HomePage({ params }: HomePageProps) {
 export async function generateMetadata({ params }: HomePageProps): Promise<Metadata> {
   const { locale } = await params;
 
-  const t = await getTranslations(config, locale);
+  const t = getTranslations(config, locale);
 
   return {
     metadataBase: new URL(`https://${config.domain}`),

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import { contentFor } from '~/lib/md';
-import { getTranslations } from '~/lib/translations';
+import { contentFor } from '~/lib/content';
+import { getTranslations } from '~/lib/i18n/messages';
 
 import Container from '~/components/Container';
 import Title from '~/components/Title';
@@ -13,8 +13,8 @@ import config from '~/app/diegocosta.com.br/config';
 
 const content = contentFor(config);
 
-export default async function HomePage() {
-  const t = await getTranslations(config);
+export default function HomePage() {
+  const t = getTranslations(config);
 
   return (
     <Container>

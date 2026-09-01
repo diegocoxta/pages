@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import Rss from 'rss';
 
-import { contentFor } from '~/lib/md';
-import { getTranslations } from '~/lib/translations';
+import { contentFor } from '~/lib/content';
+import { getTranslations } from '~/lib/i18n/messages';
 
 import config from '~/app/diegocosta.com.br/config';
 
@@ -10,8 +10,8 @@ const content = contentFor(config);
 
 export const revalidate = 3600;
 
-export async function GET() {
-  const t = await getTranslations(config);
+export function GET() {
+  const t = getTranslations(config);
 
   const feed = new Rss({
     title: config.title,

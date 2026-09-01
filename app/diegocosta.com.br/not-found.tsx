@@ -1,12 +1,12 @@
 import Container from '~/components/Container';
 import CodeBlock from '~/components/CodeBlock';
 
-import { getTranslations } from '~/lib/translations';
+import { getTranslations } from '~/lib/i18n/messages';
 
 import config from '~/app/diegocosta.com.br/config';
 
-export default async function NotFoundPage() {
-  const t = await getTranslations(config);
+export default function NotFoundPage() {
+  const t = getTranslations(config);
 
   return (
     <Container>

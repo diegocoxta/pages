@@ -1,7 +1,7 @@
 import { type Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { contentFor } from '~/lib/md';
+import { contentFor } from '~/lib/content';
 
 import Container from '~/components/Container';
 import Article from '~/components/Article';

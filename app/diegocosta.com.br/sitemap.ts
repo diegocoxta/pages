@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-import { contentFor } from '~/lib/md';
+import { contentFor } from '~/lib/content';
 
 import config from '~/app/diegocosta.com.br/config';
 

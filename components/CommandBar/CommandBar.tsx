@@ -18,7 +18,7 @@ export default function CommandBar(): React.ReactElement {
   return (
     <>
       <button
-        aria-label={t('components.commandBar.openMenu')}
+        aria-label={t('client.components.commandBar.openMenu')}
         aria-haspopup="dialog"
         className={styles.button}
         onClick={() => query.toggle()}
@@ -30,7 +30,10 @@ export default function CommandBar(): React.ReactElement {
           <KBarAnimator className={styles.animator}>
             <div className={styles.item}>
               <LuSearch size={22} aria-hidden />
-              <KBarSearch className={styles.search} defaultPlaceholder={t('components.commandBar.searchPlaceholder')} />
+              <KBarSearch
+                className={styles.search}
+                defaultPlaceholder={t('client.components.commandBar.searchPlaceholder')}
+              />
               <div className={styles.shortcut} aria-hidden>
                 <kbd className={styles.shortcutIcon}>esc</kbd>
               </div>
