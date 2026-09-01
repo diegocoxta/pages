@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { getPosts } from '~/lib/md';
+import { contentFor } from '~/lib/md';
 import { getTranslations } from '~/lib/translations';
 
 import Container from '~/components/Container';
@@ -11,13 +11,15 @@ import Article from '~/components/Article';
 
 import config from '~/app/diegocosta.com.br/config';
 
+const content = contentFor(config);
+
 export default async function HomePage() {
-  const t = await getTranslations(config, config.locales[0]);
+  const t = await getTranslations(config);
 
   return (
     <Container>
       <PageName>blog</PageName>
-      {getPosts(config.domain).map((post, index: number) => (
+      {content.getPosts().map((post, index: number) => (
         <article key={`blog-article-${index}`}>
           <header>
             <Title>

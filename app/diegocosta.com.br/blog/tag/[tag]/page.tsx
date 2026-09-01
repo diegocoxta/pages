@@ -1,7 +1,7 @@
 import { type Metadata } from 'next';
 import Link from 'next/link';
 
-import { getPosts, getTags } from '~/lib/md';
+import { contentFor } from '~/lib/md';
 import { getTranslations } from '~/lib/translations';
 
 import Container from '~/components/Container';
@@ -12,6 +12,8 @@ import Article from '~/components/Article';
 
 import config from '~/app/diegocosta.com.br/config';
 
+const content = contentFor(config);
+
 interface TagsSinglePageProps {
   params: Promise<{ tag: string }>;
 }
@@ -19,12 +21,13 @@ interface TagsSinglePageProps {
 export default async function TagsSinglePage({ params }: TagsSinglePageProps) {
   const { tag } = await params;
 
-  const t = await getTranslations(config, config.locales[0]);
+  const t = await getTranslations(config);
 
   return (
     <Container>
       <PageName>#{tag}</PageName>
-      {getPosts(config.domain)
+      {content
+        .getPosts()
         .filter((post) => post.tags?.includes(tag))
         .map((post, index: number) => (
           <article key={`article-${index}`}>
@@ -41,10 +44,7 @@ export default async function TagsSinglePage({ params }: TagsSinglePageProps) {
   );
 }
 
-export const generateStaticParams = () =>
-  getTags(config.domain).map((tag) => ({
-    tag,
-  }));
+export const generateStaticParams = () => content.getTags().map((tag) => ({ tag }));
 
 export async function generateMetadata({ params }: TagsSinglePageProps): Promise<Metadata> {
   const { tag } = await params;

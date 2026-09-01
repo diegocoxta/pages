@@ -29,7 +29,7 @@ export type LinktreeProps = ComponentWithTranslator<
   }>
 >;
 
-export default async function Linktree({ t, background, icons, cards, children }: LinktreeProps) {
+export default function Linktree({ t, background, icons, cards, children }: LinktreeProps) {
   return (
     <div className={styles.container} style={{ backgroundImage: `url(${background})` }}>
       <main className={styles.content}>

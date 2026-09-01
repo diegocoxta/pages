@@ -1,6 +1,7 @@
-import { NextRequest } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 
 import type { ConfigType } from '~/lib/config';
+import { LOCALE_HEADER, LOCALES, type Locale } from '~/lib/i18n';
 
 import diegocoxtaCom from '~/app/diegocoxta.com/config';
 import diegocostaComBr from '~/app/diegocosta.com.br/config';
@@ -10,15 +11,15 @@ export type Site = Pick<ConfigType, 'domain' | 'locales'>;
 
 const SITES: readonly Site[] = [diegocoxtaCom, diegocostaComBr, diegocostaMe];
 
-export function getSiteLocales(hostname: string): readonly string[] {
-  return SITES.find((site) => site.domain === hostname)?.locales ?? ['pt'];
+export function getSiteLocales(hostname: string): readonly Locale[] {
+  return SITES.find((site) => site.domain === hostname)?.locales ?? [LOCALES[0]];
 }
 
-export function hasLocaleRouting(locales: readonly string[]): boolean {
+export function hasLocaleRouting(locales: readonly Locale[]): boolean {
   return locales.length > 1;
 }
 
-export function resolveHostname(request: NextRequest) {
+export function resolveHostname(request: NextRequest): string {
   const hostname = (request.headers.get('host') || '').split(':')[0];
 
   if (hostname === 'localhost') {
@@ -28,10 +29,17 @@ export function resolveHostname(request: NextRequest) {
   return hostname;
 }
 
-export function rewriteToSite(request: NextRequest, hostname: string, pathname: string) {
+export function rewriteToSite(request: NextRequest, hostname: string, pathname: string): URL {
   const url = request.nextUrl.clone();
 
   url.pathname = `/${hostname}${pathname}`;
 
   return url;
+}
+
+export function rewriteWithLocale(request: NextRequest, hostname: string, pathname: string, locale: string) {
+  const headers = new Headers(request.headers);
+  headers.set(LOCALE_HEADER, locale);
+
+  return NextResponse.rewrite(rewriteToSite(request, hostname, pathname), { request: { headers } });
 }

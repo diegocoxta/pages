@@ -47,7 +47,7 @@ export default function CommandBar({ pages, posts, repository }: CommandBarProps
     })),
     ...posts.map((p) => ({
       id: `post-${p.slug}`,
-      name: p.title + p.title + p.title,
+      name: p.title,
       perform: () => router.push(`/blog/${p.slug}`),
       icon: <LuNewspaper size={18} />,
       parent: 'blog',

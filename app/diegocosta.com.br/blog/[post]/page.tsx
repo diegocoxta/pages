@@ -1,7 +1,7 @@
 import { type Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getPosts, readFile } from '~/lib/md';
+import { contentFor } from '~/lib/md';
 import { getTranslations } from '~/lib/translations';
 
 import Container from '~/components/Container';
@@ -12,6 +12,8 @@ import Article from '~/components/Article';
 
 import config from '~/app/diegocosta.com.br/config';
 
+const content = contentFor(config);
+
 interface BlogPostPageProps {
   params: Promise<{ post: string }>;
 }
@@ -19,32 +21,36 @@ interface BlogPostPageProps {
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { post } = await params;
 
-  const t = await getTranslations(config, config.locales[0]);
-  const content = readFile(config.domain, `/posts/${post}`);
+  const t = await getTranslations(config);
+  const doc = content.readFile(`/posts/${post}`);
+
+  if (!doc) {
+    notFound();
+  }
 
   return (
     <Container>
       <PageName>blog</PageName>
       <article>
         <header>
-          <Title>{content?.title}</Title>
-          <Attributes {...content} t={t} />
+          <Title>{doc.title}</Title>
+          <Attributes {...doc} t={t} />
         </header>
-        <Article>{content?.content}</Article>
+        <Article>{doc.content}</Article>
       </article>
     </Container>
   );
 }
 
-export const generateStaticParams = () => getPosts(config.domain).map(({ slug: post }) => ({ post }));
+export const generateStaticParams = () => content.getPosts().map(({ slug: post }) => ({ post }));
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { post } = await params;
-  const content = readFile(config.domain, `/posts/${post}`);
+  const doc = content.readFile(`/posts/${post}`);
 
-  if (!content) {
+  if (!doc) {
     notFound();
   }
 
-  return { title: content?.title, description: content?.summary };
+  return { title: doc.title, description: doc.summary };
 }

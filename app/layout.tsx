@@ -12,9 +12,9 @@ const sourceSans = Source_Sans_3({
   weight: ['400', '700'],
 });
 
-export default function RootLayout({ children }: React.PropsWithChildren) {
+export default async function RootLayout({ children }: React.PropsWithChildren) {
   return (
-    <html lang="pt" suppressHydrationWarning>
+    <html suppressHydrationWarning>
       <body
         className={`${sourceSans.variable}`}
         style={

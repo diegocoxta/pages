@@ -12,7 +12,7 @@ interface TranslationProviderProps {
   children: React.ReactNode;
 }
 
-export function TranslationProvider({ messages, locale, children }: TranslationProviderProps) {
+export default function TranslationProvider({ messages, locale, children }: TranslationProviderProps) {
   const t = useMemo(() => createTranslator(messages, locale), [messages, locale]);
   return <TranslatorContext.Provider value={t}>{children}</TranslatorContext.Provider>;
 }

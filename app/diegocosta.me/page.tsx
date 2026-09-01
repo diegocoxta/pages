@@ -9,7 +9,7 @@ import { getTranslations } from '~/lib/translations';
 import config from '~/app/diegocosta.me/config';
 
 export default async function HomePage() {
-  const t = await getTranslations(config, config.locales[0]);
+  const t = await getTranslations(config);
 
   return (
     <Container>
@@ -17,7 +17,7 @@ export default async function HomePage() {
         <div className="text">
           <p>{t('page.home.underConstruction')}</p>
           <p>
-            {t('page.home.checkPhotos')}
+            {t('page.home.checkPhotos')}{' '}
             <a
               target="_blank"
               href="https://unsplash.com/diegocoxta"

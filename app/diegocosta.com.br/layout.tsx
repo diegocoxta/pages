@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
-import { getPages, getPosts } from '~/lib/md';
-import { getMessages, getTranslations } from '~/lib/translations';
+import { contentFor } from '~/lib/md';
+import { getClientMessages, getTranslations } from '~/lib/translations';
 
-import { TranslationProvider } from '~/components/TranslationProvider';
+import TranslationProvider from '~/components/TranslationProvider';
 import PersonSchema from '~/components/PersonSchema';
 import Header from '~/components/Header';
 import Branding from '~/components/Branding';
@@ -13,12 +13,14 @@ import Footer from '~/components/Footer';
 
 import config from '~/app/diegocosta.com.br/config';
 
-export default async function RootLayout({ children }: React.PropsWithChildren) {
-  const t = await getTranslations(config, config.locales[0]);
-  const messages = await getMessages(config, config.locales[0]);
+const content = contentFor(config);
 
-  const pages = getPages(config.domain);
-  const posts = getPosts(config.domain);
+export default async function RootLayout({ children }: React.PropsWithChildren) {
+  const t = await getTranslations(config);
+  const messages = await getClientMessages(config);
+
+  const pages = content.getPages();
+  const posts = content.getPosts();
 
   return (
     <TranslationProvider messages={messages} locale={t.locale}>
@@ -39,10 +41,10 @@ export default async function RootLayout({ children }: React.PropsWithChildren) 
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations(config, config.locales[0]);
+  const t = await getTranslations(config);
 
   return {
-    metadataBase: `https://${config.domain}`,
+    metadataBase: new URL(`https://${config.domain}`),
     title: {
       template: `%s | ${config.title}`,
       default: config.title,

@@ -15,7 +15,7 @@ export default async function DiscogsWidget({ config, t }: RecentActivityProps) 
   });
 
   return (
-    data.releases.length && (
+    data.releases.length > 0 && (
       <>
         {config.title && <h3 className={styles.title}>{t(config.title)}</h3>}
         <ul className={styles.grid}>

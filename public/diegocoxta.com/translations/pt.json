@@ -21,7 +21,6 @@
   "config.links.blog.recentActivity.title": "Últimos posts do blog",
   "config.links.github.description": "Onde meus apps pessoais vivem, prosperam e ocasionalmente são abandonados.",
   "config.links.github.recentActivity.title": "Atividade de Contribuição",
-  "config.links.github.recentActivity.dayLabel": "{count} contribuições em {date}",
   "config.links.lastfm.description": "A trilha sonora em tempo real da minha vida diária.",
   "config.links.lastfm.recentActivity.title": "Artistas Mais Tocados Mensalmente",
   "config.links.setlist.description": "Rastreando os concertos que sobrevivo.",

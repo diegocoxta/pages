@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
-import { getMessages, getTranslations } from '~/lib/translations';
+import { getClientMessages, getTranslations } from '~/lib/translations';
 
-import { TranslationProvider } from '~/components/TranslationProvider';
+import TranslationProvider from '~/components/TranslationProvider';
 import PersonSchema from '~/components/PersonSchema';
 import Header from '~/components/Header';
 import Branding from '~/components/Branding';
@@ -12,8 +12,8 @@ import Footer from '~/components/Footer';
 import config from '~/app/diegocosta.me/config';
 
 export default async function RootLayout({ children }: React.PropsWithChildren) {
-  const t = await getTranslations(config, config.locales[0]);
-  const messages = await getMessages(config, config.locales[0]);
+  const t = await getTranslations(config);
+  const messages = await getClientMessages(config);
 
   return (
     <TranslationProvider messages={messages} locale={t.locale}>
@@ -26,10 +26,10 @@ export default async function RootLayout({ children }: React.PropsWithChildren) 
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations(config, config.locales[0]);
+  const t = await getTranslations(config);
 
   return {
-    metadataBase: `https://${config.domain}`,
+    metadataBase: new URL(`https://${config.domain}`),
     title: {
       template: `%s | ${t(config.title)}`,
       default: t(config.title),

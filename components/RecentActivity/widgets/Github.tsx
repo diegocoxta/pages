@@ -29,10 +29,6 @@ export default async function GithubWidget({ config, t }: RecentActivityProps) {
                       className={styles.day}
                       style={{ backgroundColor: day.contributionCount > 0 ? day.color : undefined }}
                       data-count={day.contributionCount}
-                      title={t('config.links.github.recentActivity.dayLabel', {
-                        count: day.contributionCount,
-                        date: t.date(day.date, { day: '2-digit', month: '2-digit', year: 'numeric' }),
-                      })}
                     />
                   ))}
                 </div>

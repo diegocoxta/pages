@@ -11,9 +11,9 @@ export type MetaAttributesProps = ComponentWithTranslator<
 
 export default function MetaAttributes({ t, ...props }: MetaAttributesProps): React.ReactElement {
   const readingTime =
-    props.readingTime! < 1
+    props.readingTime! <= 1
       ? t('components.attributes.readingTimeUnderMinute')
-      : t('components.attributes.readingTime', { minutes: props.readingTime!.toFixed() });
+      : t('components.attributes.readingTime', { count: Number(props.readingTime!.toFixed()) });
 
   return (
     <>

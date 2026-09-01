@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-import { LOCALE_COOKIE, negotiateLocale } from '~/lib/i18n';
-import { getSiteLocales, hasLocaleRouting, resolveHostname, rewriteToSite } from '~/lib/sites';
+import { LOCALE_COOKIE, LOCALE_COOKIE_MAX_AGE, isSupportedLocale, negotiateLocale } from '~/lib/i18n';
+import { getSiteLocales, hasLocaleRouting, resolveHostname, rewriteWithLocale } from '~/lib/sites';
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
@@ -13,23 +13,23 @@ const NON_LOCALIZED =
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
   const hostname = resolveHostname(request);
   const locales = getSiteLocales(hostname);
 
-  // Site de idioma único (ou asset/metadata): sem prefixo, serve direto no host.
-  if (!hasLocaleRouting(locales) || NON_LOCALIZED.test(pathname)) {
-    return NextResponse.rewrite(rewriteToSite(request, hostname, pathname));
+  const onlyOneLanguageOrAssetMetadata = !hasLocaleRouting(locales) || NON_LOCALIZED.test(pathname);
+
+  if (onlyOneLanguageOrAssetMetadata) {
+    return rewriteWithLocale(request, hostname, pathname, locales[0]);
   }
 
   const firstSegment = pathname.split('/')[1];
+  const cookie = request.cookies.get(LOCALE_COOKIE)?.value;
 
-  // Sem prefixo de idioma suportado -> redireciona para o idioma negociado.
-  if (!locales.includes(firstSegment)) {
-    const locale = negotiateLocale(
-      locales,
-      request.cookies.get(LOCALE_COOKIE)?.value,
-      request.headers.get('accept-language')
-    );
+  const withoutLanguagePrefix = !isSupportedLocale(locales, firstSegment);
+
+  if (withoutLanguagePrefix) {
+    const locale = negotiateLocale(locales, cookie, request.headers.get('accept-language'));
     const url = request.nextUrl.clone();
 
     url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
@@ -37,14 +37,16 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // "/pt/..." -> interno "/<host>/pt/...", e persiste a escolha no cookie.
-  const response = NextResponse.rewrite(rewriteToSite(request, hostname, pathname));
+  const response = rewriteWithLocale(request, hostname, pathname, firstSegment);
 
-  response.cookies.set(LOCALE_COOKIE, firstSegment, {
-    path: '/',
-    maxAge: 60 * 60 * 24 * 365,
-    sameSite: 'lax',
-  });
+  if (cookie !== firstSegment) {
+    response.cookies.set(LOCALE_COOKIE, firstSegment, {
+      path: '/',
+      maxAge: LOCALE_COOKIE_MAX_AGE,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    });
+  }
 
   return response;
 }
