@@ -2,7 +2,7 @@ import PageDescription from '~/components/PageDescription';
 
 import { getTranslations } from '~/lib/i18n/messages';
 
-import config from '~/app/diegocosta.com.br/config';
+import config from '~/app/diegocosta.me/config';
 
 export default function NotFoundPage() {
   const t = getTranslations(config);
