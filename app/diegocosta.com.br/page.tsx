@@ -1,4 +1,5 @@
-import AboutMe from '~/components/AboutMe';
+import Container from '~/components/Container';
+import PageDescription from '~/components/PageDescription';
 
 import { getTranslations } from '~/lib/i18n/messages';
 
@@ -8,8 +9,8 @@ export default function HomePage() {
   const t = getTranslations(config);
 
   return (
-    <div id="centered-page">
-      <AboutMe t={t} />
+    <div id="centered-page" aria-label={t('page.home.ariaLabel')}>
+      <PageDescription content={t('page.home.bio')} />
     </div>
   );
 }

@@ -1,5 +1,4 @@
-import Container from '~/components/Container';
-import CodeBlock from '~/components/CodeBlock';
+import PageDescription from '~/components/PageDescription';
 
 import { getTranslations } from '~/lib/i18n/messages';
 
@@ -9,11 +8,8 @@ export default function NotFoundPage() {
   const t = getTranslations(config);
 
   return (
-    <Container>
-      <CodeBlock className="language-plain">{t('page.notFound.message')}</CodeBlock>
-      <p>
-        <a href={`https://${config.domain}`}>{config.domain}</a>
-      </p>
-    </Container>
+    <div id="centered-page">
+      <PageDescription content={t('page.notFound.message', { domain: config.domain })} />
+    </div>
   );
 }
